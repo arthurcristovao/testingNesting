@@ -11,28 +11,27 @@ Interface para visualizar chapas/peças em SVG e motor iterativo para buscar lay
 - Métricas: desperdício, área utilizada, aproveitamento, chapas usadas e número de cortes.
 - Saída de sequência de cortes guilhotina quando aplicável.
 
-## Estrutura
+## Tudo dentro de `src/`
 
-- `src/engine/pieceGenerator.ts`: geração de peças aleatórias (retangulares/poligonais).
-- `src/engine/optimizer.ts`: loop iterativo com lotes paralelos por `parallelWorkers`.
-- `src/wasm/packingSolverWasm.ts`: API JS para módulo wasm compilado.
-- `cpp/packing_solver_bridge.cpp`: ponte C++ para integrar o PackingSolver real.
-- `scripts/build-native.sh`: build binário C++ local.
-- `scripts/build-wasm.sh`: build para WebAssembly com Emscripten.
+Conforme solicitado, o conteúdo de implementação fica dentro da pasta `src`:
+
+- `src/engine/*`: motor de otimização e geração de peças.
+- `src/wasm/*`: loader do módulo wasm e fallback heurístico.
+- `src/native/bridge/packing_solver_bridge.cpp`: ponte C++.
+- `src/native/scripts/*`: scripts de build native/wasm.
+- `src/native/packingsolver/`: pasta para manter os algoritmos C++ do PackingSolver.
 
 ## Integrando o PackingSolver (Florian Fontan)
 
 Repositório oficial: https://github.com/fontanf/packingsolver
 
-> Neste ambiente, o download externo pode estar bloqueado. Se estiver disponível no seu ambiente:
+Copie/clone os fontes C++ para dentro de `src/native/packingsolver`:
 
 ```bash
-mkdir -p third_party
-cd third_party
-git clone https://github.com/fontanf/packingsolver.git
+git clone https://github.com/fontanf/packingsolver.git src/native/packingsolver
 ```
 
-Depois, ajuste a ponte C++ (`cpp/packing_solver_bridge.cpp`) para incluir e chamar os módulos de:
+Depois ajuste `src/native/bridge/packing_solver_bridge.cpp` para incluir e chamar os módulos de:
 
 - **Irregular packing solver**
 - **Guillotine solver**
@@ -47,11 +46,11 @@ npm run dev
 ## Build da ponte C++
 
 ```bash
-./scripts/build-native.sh
+npm run build:cpp
 ```
 
 ## Build WASM (emscripten)
 
 ```bash
-./scripts/build-wasm.sh
+npm run build:wasm
 ```

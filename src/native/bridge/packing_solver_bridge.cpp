@@ -4,7 +4,7 @@
 #include <string>
 
 // Bridge mínima: preparada para integrar com o código do projeto
-// https://github.com/fontanf/packingsolver quando `third_party/packingsolver/src`
+// https://github.com/fontanf/packingsolver quando `src/native/packingsolver/src`
 // estiver presente e buildado com CMake/Emscripten.
 //
 // Modo atual (fallback): ecoa um JSON válido para a UI em caso de execução local.

@@ -5,7 +5,7 @@ if ! command -v em++ >/dev/null 2>&1; then
   exit 1
 fi
 mkdir -p public/wasm
-em++ cpp/packing_solver_bridge.cpp -O2 -std=c++17 \
+em++ src/native/bridge/packing_solver_bridge.cpp -O2 -std=c++17 \
   -sWASM=1 -sMODULARIZE=1 -sEXPORT_ES6=1 -sALLOW_MEMORY_GROWTH=1 \
   -sEXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' \
   -o public/wasm/packing_solver_bridge.js

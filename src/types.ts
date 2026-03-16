@@ -28,6 +28,7 @@ export interface CuttingParams {
   maxTimeMs: number;
   seed: number;
   mode: 'guillotine' | 'irregular' | 'hybrid' | 'auto';
+  parallelWorkers: number;
 }
 
 export interface Sheet {
@@ -62,6 +63,7 @@ export interface SolutionMetrics {
   usedArea: number;
   utilizationRate: number;
   totalCuts: number;
+  totalPiecesPlaced: number;
 }
 
 export interface OptimizationSolution {
@@ -72,4 +74,15 @@ export interface OptimizationSolution {
   iteration: number;
   score: number;
   seed: number;
+}
+
+export interface PieceGenerationConfig {
+  totalPieces: number;
+  minWidth: number;
+  maxWidth: number;
+  minHeight: number;
+  maxHeight: number;
+  irregularRatio: number;
+  rotatableRatio: number;
+  material: string;
 }

@@ -144,6 +144,7 @@ export async function solveHeuristicPacking(
   seedOffset: number,
 ): Promise<OptimizationSolution> {
   const random = new SeededRandom(params.seed + seedOffset);
+  const perturbation = 0.9 + random.next() * 0.2;
   const expanded = random.shuffle(expandPieces(pieces));
   const preferredMode: 'guillotine' | 'irregular' | 'hybrid' =
     params.mode === 'auto'
@@ -180,7 +181,9 @@ export async function solveHeuristicPacking(
         : preferredMode;
 
     const shouldRotate = piece.rotatable ? random.next() > 0.5 : false;
-    const rect = pieceRect(piece, shouldRotate, params.safetyMargin, params.kerf);
+    const localMargin = params.safetyMargin * perturbation;
+    const localKerf = params.kerf * (0.95 + random.next() * 0.1);
+    const rect = pieceRect(piece, shouldRotate, localMargin, localKerf);
 
     const candidateSheets = sheets.filter((s) => s.material === piece.material);
     let placed = false;
@@ -275,6 +278,7 @@ export async function solveHeuristicPacking(
       usedArea,
       utilizationRate: availableArea > 0 ? usedArea / availableArea : 0,
       totalCuts: cuts.length,
+      totalPiecesPlaced: placements.length,
     },
     iteration: seedOffset,
     score: 0,

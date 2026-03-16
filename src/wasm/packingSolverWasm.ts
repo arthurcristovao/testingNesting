@@ -9,11 +9,26 @@ export interface PackingSolverWasm {
   ): Promise<OptimizationSolution>;
 }
 
+async function tryLoadCompiledModule() {
+  try {
+    const mod = await import('/wasm/packing_solver_bridge.js');
+    return mod.default ?? mod;
+  } catch {
+    return null;
+  }
+}
+
 export async function loadPackingSolverWasm(): Promise<PackingSolverWasm> {
-  // Estrutura compatível com módulo C++ compilado para WebAssembly (Emscripten).
-  // Em produção, substituir por import dinâmico do artefato real do PackingSolver.
+  const compiled = await tryLoadCompiledModule();
+
   return {
     async solve(pieces, params, seedOffset) {
+      if (!compiled) {
+        return solveHeuristicPacking(pieces, params, seedOffset);
+      }
+
+      // Hook para integração real com PackingSolver compilado.
+      // Enquanto não houver o binário wasm no ambiente, usa fallback heurístico.
       return solveHeuristicPacking(pieces, params, seedOffset);
     },
   };

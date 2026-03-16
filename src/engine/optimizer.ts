@@ -21,14 +21,20 @@ export async function optimizeCuttingPlan(
   onProgress?.({ currentIteration: iteration, best });
 
   while (iteration < params.maxIterations && performance.now() - startedAt < params.maxTimeMs) {
-    iteration += 1;
+    const batchSize = Math.max(1, params.parallelWorkers);
+    const offsets: number[] = [];
+    for (let i = 0; i < batchSize && iteration < params.maxIterations; i += 1) {
+      iteration += 1;
+      offsets.push(iteration);
+    }
 
-    const candidate = await solver.solve(pieces, params, iteration);
-    candidate.score = scoreSolution(candidate);
-
-    if (candidate.score < best.score) {
-      best = candidate;
-      onProgress?.({ currentIteration: iteration, best });
+    const candidates = await Promise.all(offsets.map((offset) => solver.solve(pieces, params, offset)));
+    for (const candidate of candidates) {
+      candidate.score = scoreSolution(candidate);
+      if (candidate.score < best.score) {
+        best = candidate;
+        onProgress?.({ currentIteration: candidate.iteration, best });
+      }
     }
   }
 

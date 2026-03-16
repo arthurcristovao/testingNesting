@@ -54,3 +54,18 @@ npm run build:cpp
 ```bash
 npm run build:wasm
 ```
+
+
+## Código C/C++ oficial (fora de `src` do app)
+
+Conforme solicitado, o código vindo de `https://github.com/fontanf/packingsolver/tree/master/src` deve ficar na pasta:
+
+- `packingsolver_upstream_c/`
+
+Automatizamos isso com:
+
+```bash
+./scripts_download_packingsolver_src.sh
+```
+
+Esse script faz sparse-checkout apenas do diretório `src` do repositório oficial e copia tudo para `packingsolver_upstream_c`.

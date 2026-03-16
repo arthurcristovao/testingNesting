@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "build:cpp": "./src/native/scripts/build-native.sh",
-    "build:wasm": "./src/native/scripts/build-wasm.sh"
+    "build:cpp": "node src/native/scripts/build-native.mjs",
+    "build:wasm": "node src/native/scripts/build-wasm.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

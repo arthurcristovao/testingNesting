@@ -11,7 +11,8 @@ export interface PackingSolverWasm {
 
 async function tryLoadCompiledModule() {
   try {
-    const mod = await import('/wasm/packing_solver_bridge.js');
+    const bridgeUrl = '/wasm/packing_solver_bridge.js';
+    const mod = await import(/* @vite-ignore */ bridgeUrl);
     return mod.default ?? mod;
   } catch {
     return null;
